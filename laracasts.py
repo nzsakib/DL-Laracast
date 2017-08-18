@@ -1,3 +1,7 @@
+'''
+    Author: Md. Nazmus Sakib
+    Go wild with this script
+'''
 import requests
 import os
 import urllib.parse as urlparse
@@ -15,7 +19,7 @@ def download_file(url, session_request, folder):
     parsed = urlparse.urlparse(url)
     local_filename = urlparse.parse_qs(parsed.query)['filename'][0]
     save_path = os.path.join(folder, local_filename)
-    print("Downloading ...: " + save_path)
+    print("Downloading ...: " + local_filename)
 
     with open(save_path, 'wb') as f:
         for chunk in r.iter_content(chunk_size=1024):
@@ -72,6 +76,11 @@ if not os.path.exists(course_title):
 episodes = soup2.find_all("li", {
     "class": "episode-list-item"
 })
+
+print("Downloading " + str(len(episodes)) + " episodes .......")
+
+# Download each episodes
+i = 1
 for episode in episodes:
     link = episode.find("a", {
         "class": "position"
@@ -83,11 +92,14 @@ for episode in episodes:
     download_link = soup3.find("a", {
         "class": "for-download"
     })
-    print(download_link.get("href"))
+    # print(download_link.get("href"))
     url = "https://laracasts.com" + download_link.get("href")
     filename = download_file(url, session_requests, course_title)
-    print(filename + " Downloaded ")
+    print(str(i) + ". " + filename + "......Downloaded ")
+    i += 1
 
-    break
-
+# Download finished .. Now zip the folder
+http_dir = "/var/www/html/" + course_title + ".zip"
+os.system("zip -r " + http_dir + " " + course_title)
+print("=====> " + course_title + " is Downloaded in " + http_dir)
 
