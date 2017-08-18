@@ -18,7 +18,15 @@ def download_file(url, session_request, folder):
     url = r.url
     parsed = urlparse.urlparse(url)
     local_filename = urlparse.parse_qs(parsed.query)['filename'][0]
+    index = 1
     save_path = os.path.join(folder, local_filename)
+
+    while os.path.isfile(save_path):
+        base_filename, file_extension = os.path.splitext(save_path)
+        base_filename += str(index)
+        save_path = base_filename + file_extension
+        index += 1
+
     print("Downloading ...: " + local_filename)
 
     with open(save_path, 'wb') as f:
