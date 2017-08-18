@@ -73,7 +73,7 @@ soup2 = BeautifulSoup(course.content, "lxml")
 course_title = soup2.find("h1", {
     "class": "series-title"
 })
-course_title = course_title.text.strip()
+course_title = course_title.text.strip().replace(" ", "_")
 print("Course title: " + course_title)
 
 # Create folder to store videos
