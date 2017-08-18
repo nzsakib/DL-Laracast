@@ -1,0 +1,7 @@
+## Dependencies 
+- Python 3
+
+## Module
+- virtualenv
+- requests
+- beautifulsoup4
